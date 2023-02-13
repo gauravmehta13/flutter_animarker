@@ -25,8 +25,7 @@ mixin AnilocationTaskInitializer on IAnilocationTask {
       ),
     );
 
-    final locationCtrller = AnimationController(
-        vsync: description.vsync, duration: description.duration);
+    final locationCtrller = AnimationController(vsync: description.vsync, duration: description.duration);
 
     return AnimationWrapper(locationTween, locationCtrller);
   }

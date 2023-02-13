@@ -1,7 +1,6 @@
 // Flutter imports:
 import 'package:flutter_animarker/core/anilocation_task_description.dart';
 import 'package:flutter_animarker/core/animarker_controller_description.dart';
-
 // Package imports:
 
 // Project imports:
@@ -9,9 +8,7 @@ import 'package:flutter_animarker/core/i_anilocation_task.dart';
 import 'package:flutter_animarker/core/i_animarker_controller.dart';
 import 'package:flutter_animarker/core/i_lat_lng.dart';
 import 'package:flutter_animarker/helpers/extensions.dart';
-
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
-import '../helpers/extensions.dart';
 
 class AnimarkerController extends IAnimarkerController {
   @override
@@ -23,8 +20,7 @@ class AnimarkerController extends IAnimarkerController {
   bool _useRotation = true;
   double _radius = 0;
 
-  AnimarkerController({required this.description})
-      : tracker = <MarkerId, IAnilocationTask>{} {
+  AnimarkerController({required this.description}) : tracker = <MarkerId, IAnilocationTask>{} {
     _isActiveTrip = description.isActiveTrip;
     _useRotation = description.useRotation;
     _radius = description.rippleRadius;
@@ -65,9 +61,7 @@ class AnimarkerController extends IAnimarkerController {
     var task = tracker[marker.markerId]!;
 
     ///It makes markers to move at the first item to draw in map, until another location updates is received
-    if (task.description.isQueueEmpty &&
-        !task.isAnimating &&
-        task.isCompletedOrDismissed) {
+    if (task.description.isQueueEmpty && !task.isAnimating && task.isCompletedOrDismissed) {
       _locationListener(marker.toLatLngInfo);
     }
 
@@ -89,8 +83,7 @@ class AnimarkerController extends IAnimarkerController {
     }
   }
 
-  Future<void> _animationCompleted(
-      AnilocationTaskDescription description) async {
+  Future<void> _animationCompleted(AnilocationTaskDescription description) async {
     /*if (description.dispatcher.length >= description.purgeLimit) {
         var lastValue = description.dispatcher.popLast;
         anim.animatePoints(description.dispatcher.values, last: lastValue);

@@ -2,7 +2,6 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animarker/core/i_interpolation_service_optimized.dart';
-
 // Project imports:
 import 'package:flutter_animarker/core/i_lat_lng.dart';
 import 'package:flutter_animarker/helpers/spherical_util.dart';
@@ -11,8 +10,7 @@ import 'package:flutter_animarker/helpers/spherical_util.dart';
 class LocationTween extends Tween<ILatLng> {
   final IInterpolationServiceOptimized<ILatLng> _interpolator;
 
-  LocationTween({required IInterpolationServiceOptimized<ILatLng> interpolator})
-      : _interpolator = interpolator;
+  LocationTween({required IInterpolationServiceOptimized<ILatLng> interpolator}) : _interpolator = interpolator;
 
   @override
   ILatLng get begin => _interpolator.begin;
@@ -20,7 +18,7 @@ class LocationTween extends Tween<ILatLng> {
   bool get isStopped => _interpolator.isStopped;
 
   @override
-  set begin(ILatLng? value) => _interpolator.begin = value ?? ILatLng.empty();
+  set begin(ILatLng? value) => _interpolator.begin = value ?? const ILatLng.empty();
 
   @override
   ILatLng get end => _interpolator.end;
@@ -28,7 +26,7 @@ class LocationTween extends Tween<ILatLng> {
   bool get isRipple => _interpolator.end.ripple && _interpolator.end.ripple;
 
   @override
-  set end(ILatLng? value) => _interpolator.end = value ?? ILatLng.empty();
+  set end(ILatLng? value) => _interpolator.end = value ?? const ILatLng.empty();
 
   /// Interpolate two locations with planet spherical calculations at the given animation clock value.
   @override

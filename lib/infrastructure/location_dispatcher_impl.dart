@@ -7,12 +7,10 @@ import 'package:flutter_animarker/core/i_location_dispatcher.dart';
 import 'package:flutter_animarker/infrastructure/thresholding_location_mixin.dart';
 
 /// Keep the track queue of new location changes pushed
-class LocationDispatcherImpl extends ILocationDispatcher
-    with ThresholdingLocation {
+class LocationDispatcherImpl extends ILocationDispatcher with ThresholdingLocation {
   @override
-  final threshold;
-  final DoubleLinkedQueue<ILatLng> _locationQueue =
-      DoubleLinkedQueue<ILatLng>();
+  final double threshold;
+  final DoubleLinkedQueue<ILatLng> _locationQueue = DoubleLinkedQueue<ILatLng>();
 
   LocationDispatcherImpl({this.threshold = 1.5});
 
@@ -27,7 +25,7 @@ class LocationDispatcherImpl extends ILocationDispatcher
       return thresholding(entry).remove();
     }
 
-    return ILatLng.empty();
+    return const ILatLng.empty();
   }
 
   @override
@@ -36,7 +34,7 @@ class LocationDispatcherImpl extends ILocationDispatcher
       return _locationQueue.first;
     }
 
-    return ILatLng.empty();
+    return const ILatLng.empty();
   }
 
   @override
@@ -45,7 +43,7 @@ class LocationDispatcherImpl extends ILocationDispatcher
       return _locationQueue.last;
     }
 
-    return ILatLng.empty();
+    return const ILatLng.empty();
   }
 
   @override
@@ -67,6 +65,5 @@ class LocationDispatcherImpl extends ILocationDispatcher
   bool get isNotEmpty => _locationQueue.isNotEmpty;
 
   @override
-  List<ILatLng> get values =>
-      List<ILatLng>.unmodifiable(_locationQueue.toList(growable: true));
+  List<ILatLng> get values => List<ILatLng>.unmodifiable(_locationQueue.toList(growable: true));
 }

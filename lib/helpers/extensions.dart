@@ -3,17 +3,15 @@ import 'dart:math';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
-import 'package:vector_math/vector_math.dart';
-
 // Project imports:
 import 'package:flutter_animarker/core/i_lat_lng.dart';
 import 'package:flutter_animarker/core/ripple_marker.dart';
 import 'package:flutter_animarker/helpers/math_util.dart';
 import 'package:flutter_animarker/helpers/spherical_util.dart';
 import 'package:flutter_animarker/models/lat_lng_info.dart';
+// Package imports:
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:vector_math/vector_math.dart';
 
 extension DoubleEx on double {
   double get radians => MathUtil.toRadians(this).toDouble();
@@ -26,20 +24,17 @@ extension MarkerEx on Set<Marker> {
 }
 
 extension AnimationStatusEx on AnimationStatus {
-  bool get isCompletedOrDismissed =>
-      this == AnimationStatus.completed || this == AnimationStatus.dismissed;
+  bool get isCompletedOrDismissed => this == AnimationStatus.completed || this == AnimationStatus.dismissed;
 }
 
 extension GoogleMapLatLng on ILatLng {
   Marker get fromJson {
-    var bitmap = markerJson['icon'] != null
-        ? BitmapDescriptor.fromJson(markerJson['icon'])
-        : BitmapDescriptor.defaultMarker;
+    var bitmap =
+        markerJson['icon'] != null ? BitmapDescriptor.fromJson(markerJson['icon']) : BitmapDescriptor.defaultMarker;
 
     var infoWindow = markerJson['infoWindow'] != null
         ? InfoWindow(
-            anchor: Offset(markerJson['infoWindow']['anchor']![0],
-                markerJson['infoWindow']['anchor']![1]),
+            anchor: Offset(markerJson['infoWindow']['anchor']![0], markerJson['infoWindow']['anchor']![1]),
             title: markerJson['infoWindow']['title'],
             snippet: markerJson['infoWindow']['snippet'],
           )
@@ -136,8 +131,7 @@ extension TweenEx<T> on Tween<T> {
     required double end,
     required Animation<double> controller,
   }) =>
-      animate(CurvedAnimation(
-          curve: Interval(begin, end, curve: curve), parent: controller));
+      animate(CurvedAnimation(curve: Interval(begin, end, curve: curve), parent: controller));
 }
 
 extension MapToSet on Map<MarkerId, Marker> {
@@ -152,7 +146,7 @@ extension LatLngInfoEx on LatLng {
   ILatLng toLatLngInfo(MarkerId markerId, [double bearing = 0]) =>
       LatLngInfo.position(this, markerId, bearing: bearing);
 
-  ILatLng get toDefaultLatLngInfo => LatLngInfo.position(this, MarkerId(''));
+  ILatLng get toDefaultLatLngInfo => LatLngInfo.position(this, const MarkerId(''));
 
   Vector3 get vector {
     var latRad = latitude * degrees2Radians;

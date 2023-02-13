@@ -1,7 +1,6 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:flutter_animarker/core/animarker_controller_description.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
 import 'i_lat_lng.dart';
 import 'i_location_dispatcher.dart';
@@ -78,8 +77,7 @@ class AnilocationTaskDescription {
       useRotation: description.useRotation,
       rippleDuration: description.rippleDuration,
       onRippleAnimation: description.onRippleAnimation,
-      dispatcher:
-          ILocationDispatcher.queue(threshold: description.angleThreshold),
+      dispatcher: ILocationDispatcher.queue(threshold: description.angleThreshold),
     );
   }
 

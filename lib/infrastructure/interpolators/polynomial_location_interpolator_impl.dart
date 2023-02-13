@@ -5,8 +5,7 @@ import 'package:flutter_animarker/core/i_interpolation_service_optimized.dart';
 import 'package:flutter_animarker/core/i_lat_lng.dart';
 import 'package:flutter_animarker/helpers/spherical_util.dart';
 
-class PolynomialLocationInterpolator<T extends ILatLng>
-    extends IInterpolationServiceOptimized<T> {
+class PolynomialLocationInterpolator<T extends ILatLng> extends IInterpolationServiceOptimized<T> {
   @override
   late T begin;
 
@@ -48,14 +47,11 @@ class PolynomialLocationInterpolator<T extends ILatLng>
   bool get isStopped => _isEmptyOrOnlyHasOneElementOrHasTwoEqualElements;
 
   bool get _isEmptyOrOnlyHasOneElementOrHasTwoEqualElements =>
-      points.isEmpty ||
-      points.length == 1 ||
-      (points.length == 2 && begin == end);
+      points.isEmpty || points.length == 1 || (points.length == 2 && begin == end);
 
   @override
   T doInterpolate(double t) {
-    var vector = SphericalUtil.vectorSlerpOptimized(
-        _preListFloat32x4, _lastFloat32x4, _step, t);
+    var vector = SphericalUtil.vectorSlerpOptimized(_preListFloat32x4, _lastFloat32x4, _step, t);
     var latLng = SphericalUtil.vectorToPolarOptimized(vector);
     //debugPrint('($t): [${latLng.latitude},${latLng.longitude}]');
     return latLng as T;
@@ -78,8 +74,7 @@ class PolynomialLocationInterpolator<T extends ILatLng>
 
       var vector = SphericalUtil.latLngtoVector3(points[index.toInt()]);
 
-      _preListFloat32x4[index.toInt()] =
-          Float32x4(vector.x, vector.y, vector.z, t);
+      _preListFloat32x4[index.toInt()] = Float32x4(vector.x, vector.y, vector.z, t);
       //x => vector x | y => vector y | z => vector z | w => (t) position
     }
 

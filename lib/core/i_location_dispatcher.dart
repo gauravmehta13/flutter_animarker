@@ -7,8 +7,7 @@ typedef OnMarkerPosition = void Function(ILatLng latLng);
 abstract class ILocationDispatcher {
   ILocationDispatcher({double threshold = 1.5});
 
-  factory ILocationDispatcher.queue({double threshold}) =
-      LocationDispatcherImpl;
+  factory ILocationDispatcher.queue({double threshold}) = LocationDispatcherImpl;
 
   double get threshold;
 

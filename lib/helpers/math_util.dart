@@ -13,8 +13,7 @@ class MathUtil {
   /// @param n   The value to wrap.
   /// @param min The minimum.
   /// @param max The maximum.
-  static num wrap(num n, num min, num max) =>
-      (n >= min && n < max) ? n : (mod(n - min, max - min) + min);
+  static num wrap(num n, num min, num max) => (n >= min && n < max) ? n : (mod(n - min, max - min) + min);
 
   /// Returns haversine(angle-in-radians).
   /// hav(x) == (1 - cos(x)) / 2 == sin(x / 2)^2.
@@ -22,8 +21,7 @@ class MathUtil {
 
   /// Returns hav() of distance from (lat1, lng1) to (lat2, lng2) on the unit
   /// sphere.
-  static num havDistance(num lat1, num lat2, num dLng) =>
-      hav(lat1 - lat2) + hav(dLng) * cos(lat1) * cos(lat2);
+  static num havDistance(num lat1, num lat2, num dLng) => hav(lat1 - lat2) + hav(dLng) * cos(lat1) * cos(lat2);
 
   /// Computes inverse haversine. Has good numerical stability around 0.
   /// arcHav(x) == acos(1 - 2 * x) == 2 * asin(sqrt(x)).

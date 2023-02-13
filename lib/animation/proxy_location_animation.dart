@@ -13,10 +13,7 @@ import 'package:flutter/foundation.dart';
 /// object, and then later change the animation from which the proxy receives
 /// its value.
 class ProxyAnimationGeneric<T> extends Animation<T>
-    with
-        AnimationLazyListenerMixin,
-        AnimationLocalListenersMixin,
-        AnimationLocalStatusListenersMixin {
+    with AnimationLazyListenerMixin, AnimationLocalListenersMixin, AnimationLocalStatusListenersMixin {
   /// Creates a proxy animation.
   ///
   /// If the animation argument is omitted, the proxy animation will have the

@@ -3,7 +3,7 @@ import 'package:flutter_animarker/core/i_lat_lng.dart';
 import 'package:flutter_animarker/helpers/spherical_util.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
-final MarkerId defaultId = MarkerId('');
+final MarkerId defaultId = const MarkerId('');
 
 class LatLngInfo implements ILatLng {
   @override
@@ -134,9 +134,7 @@ class LatLngInfo implements ILatLng {
         (ripple == null || identical(ripple, this.ripple)) &&
         (isEmpty == null || identical(isEmpty, this.isEmpty)) &&
         (mapScale == null || identical(mapScale, this.mapScale)) &&
-        (markerJson == null ||
-            identical(markerJson, this.markerJson) ||
-            mapEquals(markerJson, this.markerJson))) {
+        (markerJson == null || identical(markerJson, this.markerJson) || mapEquals(markerJson, this.markerJson))) {
       return this;
     }
 
@@ -153,6 +151,5 @@ class LatLngInfo implements ILatLng {
   }
 
   @override
-  double operator -(ILatLng other) =>
-      SphericalUtil.computeHeading(other, this).toDouble();
+  double operator -(ILatLng other) => SphericalUtil.computeHeading(other, this).toDouble();
 }

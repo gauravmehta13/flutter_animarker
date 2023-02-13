@@ -1,7 +1,6 @@
 // Flutter imports:
 import 'package:flutter/animation.dart';
 import 'package:flutter_animarker/core/i_interpolation_service_optimized.dart';
-
 // Project imports:
 import 'package:flutter_animarker/infrastructure/interpolators/angle_interpolator_impl.dart';
 
@@ -12,12 +11,10 @@ class BearingTween extends Tween<double> {
   final IInterpolationServiceOptimized<double> _interpolator;
 
   /// Create a tween that interpolate angle bearing/heading from given [begin],[end] angle.
-  BearingTween({required IInterpolationServiceOptimized<double> interpolator})
-      : _interpolator = interpolator;
+  BearingTween({required IInterpolationServiceOptimized<double> interpolator}) : _interpolator = interpolator;
 
   /// Create a tween from a existing [LocationTween]
-  factory BearingTween.from(LocationTween tween) =>
-      BearingTween(interpolator: AngleInterpolatorImpl.from(tween));
+  factory BearingTween.from(LocationTween tween) => BearingTween(interpolator: AngleInterpolatorImpl.from(tween));
 
   //Getters
   @override

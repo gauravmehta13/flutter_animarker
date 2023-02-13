@@ -1,20 +1,17 @@
 // Flutter imports:
 import 'package:diffutil_dart/diffutil.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animarker/animation/animarker_controller.dart';
 import 'package:flutter_animarker/core/animarker_controller_description.dart';
+import 'package:flutter_animarker/core/i_animarker_controller.dart';
+import 'package:flutter_animarker/helpers/google_map_helper.dart';
 import 'package:flutter_animarker/helpers/spherical_util.dart';
-
 // Package imports:
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
+import '../flutter_map_marker_animation.dart';
 // Project imports:
 import '../helpers/extensions.dart';
-import '../flutter_map_marker_animation.dart';
-import 'package:flutter_animarker/helpers/extensions.dart';
-import 'package:flutter_animarker/helpers/google_map_helper.dart';
-import 'package:flutter_animarker/animation/animarker_controller.dart';
-import 'package:flutter_animarker/core/i_animarker_controller.dart';
 
 ///Google Maps widget wrapper for location, angle and ripple animation on map canvas
 /// The basic setup for using *Animarker* for Google Maps
@@ -313,11 +310,9 @@ class Animarker extends StatefulWidget {
     this.duration = const Duration(milliseconds: 1000),
     this.rippleDuration = const Duration(milliseconds: 2000),
     this.shouldAnimateCamera = true,
-  })  : assert(rippleRadius >= 0.0 && rippleRadius <= 1.0,
-            'Must choose values between [0.0, 1.0] for radius scale'),
+  })  : assert(rippleRadius >= 0.0 && rippleRadius <= 1.0, 'Must choose values between [0.0, 1.0] for radius scale'),
         assert(!markers.isAnyEmpty, 'Must choose a not empty MarkerId'),
-        assert(markers.markerIds.length == markers.length,
-            'Must choose a unique MarkerId per Marker'),
+        assert(markers.markerIds.length == markers.length, 'Must choose a unique MarkerId per Marker'),
         super(key: key);
 
   @override
@@ -333,7 +328,7 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
   final Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   final Map<CircleId, Circle> _circles = <CircleId, Circle>{};
   Set<Marker> _previousMarkers = <Marker>{};
-  ILatLng midPoint = ILatLng.empty();
+  ILatLng midPoint = const ILatLng.empty();
   double _zoomScale = 0.5;
 
   @override
@@ -349,8 +344,10 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
     );
 
     _markers.addAll(keyByMarkerId(widget.markers));
-    widget.markers
-        .forEach((marker) async => await _controller.pushMarker(marker));
+
+    Future.forEach<Marker>(widget.markers, (marker) async {
+      await _controller.pushMarker(marker);
+    });
 
     if (widget.markers.isNotEmpty) midPoint = _calculateMidPoint();
 
@@ -362,8 +359,7 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
 
   @override
   void didUpdateWidget(Animarker oldWidget) {
-    print(
-        'didUpdateWidget: ${oldWidget.markers.map((e) => e.rotation).join(',')}');
+    print('didUpdateWidget: ${oldWidget.markers.map((e) => e.rotation).join(',')}');
     if (oldWidget.markers.length > widget.markers.length) {
       print('didUpdateWidget: updateMarkers');
       widget.updateMarkers(oldWidget.markers, widget.markers);
@@ -374,9 +370,7 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
       oldWidget.markers.toList(),
       widget.markers.toList(),
       equalityChecker: (o1, o2) =>
-          o1.markerId == o2.markerId &&
-          o1.position == o2.position &&
-          o1.rotation == o2.rotation,
+          o1.markerId == o2.markerId && o1.position == o2.position && o1.rotation == o2.rotation,
     );
     diffResult.getUpdatesWithData().forEach((element) {
       element.when(
@@ -398,8 +392,7 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
     }
 
     if (widget.radiusOrZoomHasChanged(oldWidget) && midPoint.isNotEmpty) {
-      _zoomScale = SphericalUtil.calculateZoomScale(
-          _devicePxRatio, widget.zoom, midPoint);
+      _zoomScale = SphericalUtil.calculateZoomScale(_devicePxRatio, widget.zoom, midPoint);
       _controller.updateRadius(widget.rippleRadius);
     }
 
@@ -410,14 +403,11 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
   void didChangeDependencies() async {
     print('Markers: didChangeDependencies ${widget.markers.length}');
     _devicePxRatio = MediaQuery.of(context).devicePixelRatio;
-    _zoomScale =
-        SphericalUtil.calculateZoomScale(_devicePxRatio, widget.zoom, midPoint);
+    _zoomScale = SphericalUtil.calculateZoomScale(_devicePxRatio, widget.zoom, midPoint);
 
     var mapId = await widget.mapId;
 
-    GoogleMapsFlutterPlatform.instance
-        .onMarkerTap(mapId: mapId)
-        .listen((MarkerTapEvent e) {
+    GoogleMapsFlutterPlatform.instance.onMarkerTap(mapId: mapId).listen((MarkerTapEvent e) {
       var value = keyByMarkerId(widget.markers)[e.value];
       if (value != null && value.onTap != null) {
         value.onTap?.call();
@@ -450,10 +440,10 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
     var sumLat = 0.0;
     var sumLng = 0.0;
 
-    widget.markers.forEach((element) {
+    for (var element in widget.markers) {
       sumLat += element.position.latitude;
       sumLng += element.position.longitude;
-    });
+    }
 
     return ILatLng.point(sumLat / count, sumLng / count);
   }
@@ -475,8 +465,7 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
   void _rippleListener(Circle circle) async {
     var tempCircles = _circles.set;
     _zoomScale = 0.000015;
-    _circles[circle.circleId] =
-        circle.copyWith(radiusParam: circle.radius / _zoomScale);
+    _circles[circle.circleId] = circle.copyWith(radiusParam: circle.radius / _zoomScale);
 
     await widget.updateCircles(tempCircles, _circles.set);
   }
@@ -491,12 +480,9 @@ class AnimarkerState extends State<Animarker> with TickerProviderStateMixin {
 
 extension AnimarkerEx on Animarker {
   bool radiusOrZoomHasChanged(Animarker oldWidget) =>
-      (oldWidget.rippleRadius != rippleRadius || oldWidget.zoom != zoom) &&
-      markers.isNotEmpty;
-  bool isActiveTripHasChanged(Animarker oldWidget) =>
-      oldWidget.isActiveTrip != isActiveTrip;
-  bool useRotationHasChanged(Animarker oldWidget) =>
-      oldWidget.useRotation != useRotation;
+      (oldWidget.rippleRadius != rippleRadius || oldWidget.zoom != zoom) && markers.isNotEmpty;
+  bool isActiveTripHasChanged(Animarker oldWidget) => oldWidget.isActiveTrip != isActiveTrip;
+  bool useRotationHasChanged(Animarker oldWidget) => oldWidget.useRotation != useRotation;
 
   Future<void> updateCircles(Set<Circle> previous, Set<Circle> current) async {
     var mapId = await this.mapId;
@@ -510,7 +496,6 @@ extension AnimarkerEx on Animarker {
 
   Future<void> animateCamera(CameraUpdate cameraUpdate) async {
     var mapId = await this.mapId;
-    await GoogleMapsFlutterPlatform.instance
-        .animateCamera(cameraUpdate, mapId: mapId);
+    await GoogleMapsFlutterPlatform.instance.animateCamera(cameraUpdate, mapId: mapId);
   }
 }
